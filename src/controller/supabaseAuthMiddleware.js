@@ -19,8 +19,9 @@ export const supabaseAuthMiddleware = async (req, res, next) => {
 
   const authId = data.user.id;
   const user = await User.getUserByAuthId(authId);
-  const profile = await UserProfile.getUserProfileByUserId(authId);
+  if (await UserProfile.getUserProfileByUserId(authId)) {
+    req.profile = await UserProfile.getUserProfileByUserId(authId);
+  }
   req.user = user;
-  req.profile = profile;
   return next();
 }

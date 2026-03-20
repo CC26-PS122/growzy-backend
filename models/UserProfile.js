@@ -1,25 +1,31 @@
 import supabase from '../config/db.js';
 
 class UserProfile {
-  static async createUserProfile(userData) {
-    const { baselineSleepHours, baselineWaterMl, dailySleepTarget, dailyWaterTarget, } = userData;
-    const userId = req.user.auth_id
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .upsert([
-        {
+  static async createUserProfile(userId, userData) {
+    try {
+      const { baseline_sleep_hours, baseline_water_ml, daily_sleep_target, daily_water_target } = userData;
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .upsert({
           user_id: userId,
-          baseline_sleep_hours: baselineSleepHours,
-          baseline_water_ml: baselineWaterMl,
-          daily_sleep_target: dailySleepTarget,
-          daily_water_target: dailyWaterTarget,
-        }
-      ]);
+          baseline_sleep_hours: baseline_sleep_hours,
+          baseline_water_ml: baseline_water_ml,
+          daily_sleep_target: daily_sleep_target,
+          daily_water_target: daily_water_target,
+        },
+          { onConflict: 'user_id' }
+        )
+        .select()
+        .maybeSingle();
 
-    if (error) {
-      throw new Error(error.message);
-    } else {
+      if (error) {
+        throw error;
+      }
+
       return data;
+    } catch (error) {
+      console.error('Error creating your profile', error);
+      throw error;
     }
   }
 
@@ -43,10 +49,7 @@ class UserProfile {
       console.error('Error fetching profile by user ID', error);
       throw error;
     }
-
   }
-
-
 }
 
 export default UserProfile;

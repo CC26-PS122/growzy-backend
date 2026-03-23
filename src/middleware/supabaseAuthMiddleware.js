@@ -1,6 +1,7 @@
-import supabase from '../../config/db.js';
-import User from '../../models/User.js';
-import UserProfile from '../../models/UserProfile.js';
+import supabase from '../config/db.js';
+import Character from '../models/Character.js';
+import User from '../models/User.js';
+import UserProfile from '../models/UserProfile.js';
 
 export const supabaseAuthMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -19,9 +20,14 @@ export const supabaseAuthMiddleware = async (req, res, next) => {
 
   const authId = data.user.id;
   const user = await User.getUserByAuthId(authId);
+  req.user = user;
+
   if (await UserProfile.getUserProfileByUserId(authId)) {
     req.profile = await UserProfile.getUserProfileByUserId(authId);
   }
-  req.user = user;
+
+  if (await Character.getCharacterByUserId(authId)) {
+    req.character = await Character.getCharacterByUserId(authId);
+  }
   return next();
 }

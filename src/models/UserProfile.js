@@ -29,9 +29,29 @@ class UserProfile {
     }
   }
 
+  static async updateUserProfileByUserId(userId, userData) {
+    if (!userId) {
+      throw new Error('User ID is required to update your profile')
+    }
+
+    try {
+      const {data, error} = await supabase
+        .from('user_profiles')
+        .update(userData)
+        .eq('user_id', userId);
+
+      if (error) throw error
+
+      return data;
+    } catch (error) {
+      console.error('Error updating your profile', error);
+      throw error;
+    }
+  }
+
   static async getUserProfileByUserId(userId) {
     if (!userId) {
-      throw new Error('User ID is required to fetch user profile')
+      throw new Error('User ID is required to fetch your profile')
     }
     try {
       const { data, error } = await supabase
@@ -40,13 +60,11 @@ class UserProfile {
         .eq('user_id', userId)
         .single();
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       return data;
     } catch (error) {
-      console.error('Error fetching profile by user ID', error);
+      console.error('Error fetching your profile', error);
       throw error;
     }
   }

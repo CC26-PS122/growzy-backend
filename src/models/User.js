@@ -72,7 +72,6 @@ class User {
       throw error;
     }
   }
-
 }
 
 export default User;

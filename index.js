@@ -11,10 +11,6 @@ const app = express()
 // }));
 
 app.use(express.json());
-app.use('/', (req, res) => res.status(404).json({
-  message: 'Welcome to Growzy API',
-}));
-
 app.use('/api', router);
 app.use('/api/auth', authRouter);
 

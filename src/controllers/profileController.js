@@ -33,7 +33,7 @@ export const putUserProfile = async (req, res) => {
       return res.status(401).json({ message: 'User ID not found in token' });
     }
 
-    const profile = await ProfileService.updateUserProfileByUserId(userId, userData);
+    await ProfileService.updateUserProfileByUserId(userId, userData);
     res.status(201).json({ message: 'Successfully updating your profile' });
   } catch (error) {
     res.status(500).json({ message: 'Failed to process profile', error: error.message });

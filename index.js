@@ -1,11 +1,20 @@
 import express from 'express';
 import router from './src/router/router.js';
 import authRouter from './src/router/authRouter.js';
+// import cors from 'cors';
 
 const PORT = 3000 || process.env.PORT
 const app = express()
 
+// app.use(cors({
+//   origin: 'https://your-frontend.com'
+// }));
+
 app.use(express.json());
+app.use('/', (req, res) => res.status(404).json({
+  message: 'Welcome to Growzy API',
+}));
+
 app.use('/api', router);
 app.use('/api/auth', authRouter);
 

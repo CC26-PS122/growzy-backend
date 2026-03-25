@@ -2,7 +2,7 @@ import express from 'express';
 import { authMiddleware, getUser, putUser } from '../controllers/userController.js';
 import { getUserProfile, putUserProfile } from '../controllers/profileController.js';
 import { getCharacter } from '../controllers/characterController.js';
-import { postDailyLog } from '../controllers/dailyLogController.js';
+import { postDailyLog, postSleepLog } from '../controllers/dailyLogController.js';
 
 const authRouter = express.Router();
 
@@ -19,5 +19,6 @@ authRouter.get('/user/characters/me', getCharacter);
 // authRouter.post('/user/characters/me', postCharacter);
 
 authRouter.post('/user/daily-log', postDailyLog);
+authRouter.post('/user/sleep-log', postSleepLog);
 
 export default authRouter;

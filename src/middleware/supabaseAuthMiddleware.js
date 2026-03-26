@@ -1,5 +1,6 @@
 import supabase from '../config/db.js';
 import Character from '../models/Character.js';
+import DailyLog from '../models/DailyLog.js';
 import User from '../models/User.js';
 import UserProfile from '../models/UserProfile.js';
 
@@ -18,7 +19,7 @@ export const supabaseAuthMiddleware = async (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const authId = data.user.id;
+  const authId = data.user.id; 
   const user = await User.getUserByAuthId(authId);
   req.user = user;
 
@@ -29,5 +30,6 @@ export const supabaseAuthMiddleware = async (req, res, next) => {
   if (await Character.getCharacterByUserId(authId)) {
     req.character = await Character.getCharacterByUserId(authId);
   }
+
   return next();
 }

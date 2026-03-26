@@ -11,16 +11,6 @@ class SurveyService {
     }
   }
 
-  static async getOptionById(optionId) {
-    try {
-      const option = await Survey.getOptionById(optionId);
-      return option;
-    } catch (error) {
-      console.error('Error fetching survey option:', error);
-      throw error;
-    }
-  }
-
   static async calculateRecommendation(drinkAnswer, moodAnswer, sleepAnswer) {
     const options = await Survey.getOptionByText([drinkAnswer, moodAnswer, sleepAnswer]);
 

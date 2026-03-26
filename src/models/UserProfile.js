@@ -18,10 +18,7 @@ class UserProfile {
         .select()
         .maybeSingle();
 
-      if (error) {
-        throw error;
-      }
-
+      if (error) throw error;
       return data;
     } catch (error) {
       console.error('Error creating your profile', error);

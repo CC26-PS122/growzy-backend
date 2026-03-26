@@ -21,17 +21,6 @@ class Survey {
     return data;
   }
 
-  static async getOptionById(optionId) {
-    const { data, error } = await supabase
-      .from('survey_options')
-      .select('option_text, numeric_value, mood_tag')
-      .eq('id', optionId)
-      .single();
-
-    if (error) throw error;
-    return data;
-  }
-
   static async getOptionByText(answers) {
     const { data, error } = await supabase
       .from('survey_options')

@@ -1,35 +1,73 @@
-import UserProfile from '../models/UserProfile.js';
+import supabase from '../config/db.js';
 
-class ProfileService {
-  static async createUserProfile(userId, userData) {
-    try {
-      const profile = await UserProfile.createUserProfile(userId, userData);
-      return profile;
-    } catch (error) {
-      console.error('Error creating profile:', error);
-      throw error;
-    }
+export const createUserProfile = async (userId, userData) => {
+  if (!userId) {
+    throw new Error('User ID is required to create a profile')
   }
 
-  static async getUserProfileByUserId(userId) {
-    try {
-      const profile = await UserProfile.getUserProfileByUserId(userId);
-      return profile;
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      throw error;
-    }
-  }
+  try {
+    const { baseline_sleep_hours, baseline_water_ml, daily_sleep_target, daily_water_target } = userData;
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .upsert({
+        user_id: userId,
+        baseline_sleep_hours,
+        baseline_water_ml,
+        daily_sleep_target,
+        daily_water_target,
+      },
+        { onConflict: 'user_id' }
+      )
+      .select()
+      .maybeSingle();
 
-  static async updateUserProfileByUserId(userId, userData) {
-    try {
-      const updatedProfile = await UserProfile.updateUserProfileByUserId(userId, userData);
-      return updatedProfile;
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      throw error;
-    }
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error creating your profile', error);
+    throw error;
   }
 }
 
-export default ProfileService;
+export const updateUserProfileByUserId = async (userId, userData) => {
+  if (!userId) {
+    throw new Error('User ID is required to update your profile')
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .update(userData)
+      .eq('user_id', userId)
+      .select()
+      .single();
+
+    if (error) throw error
+
+    return data;
+  } catch (error) {
+    console.error('Error updating your profile', error);
+    throw error;
+  }
+}
+
+export const getUserProfileByUserId = async (userId) => {
+  if (!userId) {
+    throw new Error('User ID is required to fetch your profile')
+  }
+  try {
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('user_id', userId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+  } catch (error) {
+    console.error('Error fetching your profile', error);
+    throw error;
+  }
+}

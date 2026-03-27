@@ -1,5 +1,5 @@
-import UserService from '../services/userService.js';
 import { supabaseAuthMiddleware } from '../middleware/supabaseAuthMiddleware.js';
+import { loginUser, registerUser, updateUserByAuthId } from '../services/userService.js';
 
 export const authMiddleware = async (req, res, next) => {
   supabaseAuthMiddleware(req, res, next);
@@ -10,14 +10,24 @@ export const signup = async (req, res) => {
     const { email, password, username, user_data } = req.body;
 
     if (!email || !password || !username) {
-      return res.status(400).json({ message: 'Email, password, and username are required' });
+      return res.status(400).json({
+        success: false,
+        message: 'Email, password, and username are required'
+      });
     }
 
-    await UserService.registerUser(email, password, username, user_data);
-
-    res.status(201).json({ message: 'Successfully signed user up!' });
+    const result = await registerUser(email, password, username, user_data);
+    res.status(201).json({
+      success: true,
+      message: 'Successfully signed user up!',
+      data: result
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Failed to sign user up!",
+      error: error.message
+    });
   }
 };
 
@@ -26,21 +36,40 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required'
+      });
     }
 
-    const data = await UserService.loginUser(email, password);
-    res.status(200).json(data);
+    const result = await loginUser(email, password);
+    res.status(200).json({
+      success: true,
+      message: "Successfully log you in!",
+      data: result
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Failed to logged you in!",
+      error: error.message
+    });
   }
 };
 
 export const getUser = async (req, res) => {
   try {
-    res.status(200).send(req.user);
+    res.status(200).json({
+      success: true,
+      message: "User data fetched successfully!",
+      data: req.user
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user data",
+      error: error.message
+    });
   }
 };
 
@@ -50,13 +79,25 @@ export const putUser = async (req, res) => {
     const authId = req.user.auth_id;
 
     if (!username) {
-      return res.status(400).json({ message: 'Username is required' });
+      return res.status(400).json({
+        success: false,
+        message: 'Username is required'
+      });
     }
 
-    await UserService.updateUserByAuthId(authId, { username });
-    res.status(200).json({ message: 'Successfully updating user' });
+    const updatedUser = await updateUserByAuthId(authId, { username });
+
+    res.status(200).json({
+      success: true,
+      message: "Successfully updating your data",
+      data: updatedUser
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Failed to update user data",
+      error: error.message
+    });
   }
 };
 

@@ -1,54 +1,83 @@
-import User from '../models/User.js';
-import CharacterService from './characterService.js';
-import ProfileService from './profileService.js';
+import supabase from '../config/db.js';
+import { createUserCharacter } from './characterService.js';
 
-class UserService {
-  static async registerUser(email, password, username, userData) {
-    try {
-      const authId = await User.createAuthUser(email, password);
-      const user = await User.createDbUser({ auth_id: authId, username, email });
+export const registerUser = async (email, password, username, userData) => {
+  try {
+    const authId = await createAuthUser(email, password);
+    const user = await createDbUser({ auth_id: authId, username, email });
 
-      const [profile, character] = await Promise.all([
-        await ProfileService.createUserProfile(authId, userData),
-        await CharacterService.createUserCharacter(authId, userData),
-      ]);
+    const [profile, character] = await Promise.all([
+      ProfileService.createUserProfile(authId, userData),
+      createUserCharacter(authId, userData),
+    ]);
 
-      return { authId, user, profile, character };
-    } catch (error) {
-      console.error('Error registering user:', error);
-      throw error;
-    }
-  }
-
-  static async loginUser(email, password) {
-    try {
-      const data = await User.authLogin(email, password);
-      return data;
-    } catch (error) {
-      console.error('Error logging in user:', error);
-      throw error;
-    }
-  }
-
-  static async getUserByAuthId(authId) {
-    try {
-      const user = await User.getUserByAuthId(authId);
-      return user;
-    } catch (error) {
-      console.error('Error fetching user:', error);
-      throw error;
-    }
-  }
-
-  static async updateUserByAuthId(authId, updateData) {
-    try {
-      const user = await User.updateUserByAuthId(authId, updateData);
-      return user;
-    } catch (error) {
-      console.error('Error updating user:', error);
-      throw error;
-    }
+    return { authId, user, profile, character };
+  } catch (error) {
+    console.error('Error registering user:', error);
+    throw error;
   }
 }
 
-export default UserService;
+export const loginUser = async (email, password) => {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return data;
+};
+
+const createDbUser = async (user) => {
+  const { data, error } = await supabase
+    .from('users')
+    .insert(user)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+};
+
+const createAuthUser = async (email, password) => {
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) throw error;
+  return data.user.id;
+};
+
+export const getUserByAuthId = async (authId) => {
+  if (!authId) {
+    throw new Error('Auth ID is required to fetch user');
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, auth_id, username, email, created_at')
+      .eq('auth_id', authId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error fetching user by auth ID', error);
+    throw error;
+  }
+}
+
+export const updateUserByAuthId = async (authId, updateData) => {
+  if (!authId || !updateData) {
+    throw new Error('Missing authId or updateData for updating user');
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .update(updateData)
+      .eq('auth_id', authId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
+  }
+}

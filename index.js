@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   });
 });
 
-// app.listen(PORT, () => console.log(`Growzy app listening on PORT ${PORT}!`))
-app.get('/', (req, res) => res.json({ message: 'API is running' }));
+app.listen(PORT, () => console.log(`Growzy app listening on PORT ${PORT}!`))
+// app.get('/', (req, res) => res.json({ message: 'API is running' }));
 
 export default app;

@@ -1,5 +1,6 @@
 import supabase from '../config/db.js';
 import { createUserCharacter } from './characterService.js';
+import { createUserProfile } from './profileService.js';
 
 export const registerUser = async (email, password, username, userData) => {
   try {
@@ -7,7 +8,7 @@ export const registerUser = async (email, password, username, userData) => {
     const user = await createDbUser({ auth_id: authId, username, email });
 
     const [profile, character] = await Promise.all([
-      ProfileService.createUserProfile(authId, userData),
+      createUserProfile(authId, userData),
       createUserCharacter(authId, userData),
     ]);
 
@@ -35,7 +36,11 @@ const createDbUser = async (user) => {
 };
 
 const createAuthUser = async (email, password) => {
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email, password, options: {
+      emailRedirectTo: "https://growzy-backend.vercel.app/confirm-email"
+    }
+  });
   if (error) throw error;
   return data.user.id;
 };

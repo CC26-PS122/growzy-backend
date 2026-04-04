@@ -1,4 +1,5 @@
 import supabase from '../config/db.js';
+import { convertWIBtoUTC } from '../helpers/timeHelper.js';
 
 export const createUserProfile = async (userId, userData) => {
   if (!userId) {
@@ -6,7 +7,10 @@ export const createUserProfile = async (userId, userData) => {
   }
 
   try {
-    const { baseline_sleep_hours, baseline_water_ml, daily_sleep_target, daily_water_target } = userData;
+    let { baseline_sleep_hours, baseline_water_ml, daily_sleep_target, daily_water_target, reminder_time } = userData;
+
+    reminder_time = convertWIBtoUTC(reminder_time);
+
     const { data, error } = await supabase
       .from('user_profiles')
       .upsert({
@@ -15,6 +19,7 @@ export const createUserProfile = async (userId, userData) => {
         baseline_water_ml,
         daily_sleep_target,
         daily_water_target,
+        reminder_time,
       },
         { onConflict: 'user_id' }
       )

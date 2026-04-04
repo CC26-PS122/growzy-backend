@@ -55,7 +55,6 @@ export const getUserByAuthId = async (authId) => {
       .from('users')
       .select('id, auth_id, username, email, created_at')
       .eq('auth_id', authId)
-      .select()
       .single();
 
     if (error) throw error;

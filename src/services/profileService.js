@@ -9,7 +9,9 @@ export const createUserProfile = async (userId, userData) => {
   try {
     let { baseline_sleep_hours, baseline_water_ml, daily_sleep_target, daily_water_target, reminder_time } = userData;
 
-    reminder_time = convertWIBtoUTC(reminder_time);
+    if (reminder_time) {
+      reminder_time = convertWIBtoUTC(reminder_time);
+    }
 
     const { data, error } = await supabase
       .from('user_profiles')

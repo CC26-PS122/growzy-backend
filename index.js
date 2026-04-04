@@ -3,7 +3,7 @@ import router from './src/router/router.js';
 import authRouter from './src/router/authRouter.js';
 // import cors from 'cors';
 
-const PORT = 3000 || process.env.PORT
+const PORT = process.env.PORT || 4000
 const app = express()
 
 // app.use(cors({

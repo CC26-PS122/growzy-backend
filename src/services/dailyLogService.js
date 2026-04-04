@@ -73,7 +73,7 @@ export const updateDailyActivity = async (userId, dailyLog) => {
 
     const { data: totalData, error: totalError } = await supabase
       .from('daily_logs')
-      .update({ total_water_ml: logData.total_water_ml + dailyLog.amount })
+      .update({ total_water_ml: (logData.total_water_ml ?? 0) + dailyLog.amount })
       .eq('id', logData.id)
       .select()
       .single();

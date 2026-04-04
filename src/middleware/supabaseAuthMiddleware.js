@@ -31,17 +31,17 @@ export const supabaseAuthMiddleware = async (req, res, next) => {
 
     req.user = user;
 
-    const [profile, character] = await Promise.all([
+    const [profile, character] = await Promise.allSettled([
       getUserProfileByUserId(authId),
       getCharacterByUserId(authId)
     ])
 
     if (profile) {
-      req.profile = profile;
+      req.profile = profile.status === 'fulfilled' ? profile.value : null;
     }
 
     if (character) {
-      req.character = character;
+      req.character = character.status === 'fulfilled' ? character.value : null;
     }
 
     return next();

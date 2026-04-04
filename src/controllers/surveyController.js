@@ -1,4 +1,4 @@
-import { getQuestions } from "../services/surveyService.js";
+import { calculateRecommendation, getQuestions } from "../services/surveyService.js";
 
 export const getSurvey = async (req, res) => {
   try {

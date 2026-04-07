@@ -1,13 +1,12 @@
 import express from 'express';
 import router from './src/router/router.js';
 import authRouter from './src/router/authRouter.js';
-// import cors from 'cors';
+import cors from 'cors';
 
 const PORT = process.env.PORT || 4000
 const app = express()
 
 app.use(cors({
-  // origin: 'https://your-frontend.com'
   origin: '*'
 }));
 

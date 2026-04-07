@@ -6,9 +6,10 @@ import authRouter from './src/router/authRouter.js';
 const PORT = process.env.PORT || 4000
 const app = express()
 
-// app.use(cors({
-//   origin: 'https://your-frontend.com'
-// }));
+app.use(cors({
+  // origin: 'https://your-frontend.com'
+  origin: '*'
+}));
 
 app.use(express.json());
 app.use('/api', router);

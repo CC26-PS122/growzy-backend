@@ -2,9 +2,9 @@ import { getDailyLogsByUserId, updateDailyActivity } from "../services/dailyLogS
 
 export const handleUpdateLog = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.auth_id;
     const logData = req.body;
-
+    console.log(userId)
     const result = await updateDailyActivity(userId, logData);
 
     res.status(200).json({
@@ -23,7 +23,7 @@ export const handleUpdateLog = async (req, res) => {
 
 export const getDailyLogs = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.auth_id;
     const result = await getDailyLogsByUserId(userId);
 
     res.status(200).json({

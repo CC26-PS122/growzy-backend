@@ -25,6 +25,12 @@ export const loginUser = async (email, password) => {
   return data;
 };
 
+export const logoutUser = async (token) => {
+  const { data, error } = await supabase.auth.signOut(token);
+  if (error) throw error;
+  return data;
+};
+
 const createDbUser = async (user) => {
   const { data, error } = await supabase
     .from('users')
@@ -53,7 +59,7 @@ export const getUserByAuthId = async (authId) => {
   try {
     const { data, error } = await supabase
       .from('users')
-      .select('id, auth_id, username, email, created_at')
+      .select('auth_id, username, email, created_at')
       .eq('auth_id', authId)
       .single();
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import { authMiddleware, getUser, putUser } from '../controllers/userController.js';
+import { authMiddleware, getUser, logout, putUser } from '../controllers/userController.js';
 import { getUserProfile, putUserProfile } from '../controllers/profileController.js';
 import { getCharacter } from '../controllers/characterController.js';
 import { getDailyLogs, handleUpdateLog } from '../controllers/dailyLogController.js';
@@ -10,6 +10,8 @@ authRouter.use(authMiddleware);
 
 authRouter.get('/user', getUser);
 authRouter.put('/user', putUser);
+
+authRouter.post('/logout', logout);
 
 authRouter.get('/profile', getUserProfile);
 authRouter.put('/profile', putUserProfile);

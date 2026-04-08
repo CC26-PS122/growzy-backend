@@ -19,7 +19,7 @@ export const getUserProfile = async (req, res) => {
 export const putUserProfile = async (req, res) => {
   try {
     const userData = req.body;
-    const userId = req.user.id;
+    const userId = req.user.auth_id;
 
     if (!userId) {
       return res.status(401).json({

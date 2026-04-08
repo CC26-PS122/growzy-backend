@@ -1,5 +1,5 @@
 import { supabaseAuthMiddleware } from '../middleware/supabaseAuthMiddleware.js';
-import { loginUser, registerUser, updateUserByAuthId } from '../services/userService.js';
+import { loginUser, logoutUser, registerUser, updateUserByAuthId } from '../services/userService.js';
 
 export const authMiddleware = async (req, res, next) => {
   supabaseAuthMiddleware(req, res, next);
@@ -52,6 +52,22 @@ export const login = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to logged you in!",
+      error: error.message
+    });
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    await logoutUser(req.headers.authorization.split(" ")[1]);
+    res.status(200).json({
+      success: true,
+      message: "Successfully log you out!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Failed to logged you out!",
       error: error.message
     });
   }

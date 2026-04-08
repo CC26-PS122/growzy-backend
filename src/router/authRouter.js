@@ -11,13 +11,13 @@ authRouter.use(authMiddleware);
 authRouter.get('/user', getUser);
 authRouter.put('/user', putUser);
 
-authRouter.get('/user/profile', getUserProfile);
-authRouter.put('/user/profile', putUserProfile);
+authRouter.get('/profile', getUserProfile);
+authRouter.put('/profile', putUserProfile);
 
-authRouter.get('/user/characters/me', getCharacter);
+authRouter.get('/character', getCharacter);
 
-authRouter.get('/user/daily-logs', getDailyLogs);
+authRouter.get('/daily-logs', getDailyLogs);
 
-authRouter.put('/user/daily-logs', handleUpdateLog);
+authRouter.put('/daily-logs', handleUpdateLog);
 
 export default authRouter;

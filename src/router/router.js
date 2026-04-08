@@ -5,8 +5,8 @@ import { getSurvey, calculateSurveyHandler } from '../controllers/surveyControll
 const router = express.Router();
 
 router.get('/survey', getSurvey);
-router.post('/survey/recommend', calculateSurveyHandler);
-router.post('/signup', signup);
+router.post('/survey/recommendation', calculateSurveyHandler);
+router.post('/register', signup);
 router.post('/login', login);
 
 export default router;

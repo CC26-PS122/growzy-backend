@@ -1,6 +1,6 @@
 export const getCharacter = async (req, res) => {
   if (!req.character) {
-    return res.status(500).json({
+    return res.status(404).json({
       success: false,
       message: "Character not found. User might not have completed the survey yet.",
       data: null

@@ -2,12 +2,19 @@ import express from 'express';
 import router from './src/router/router.js';
 import authRouter from './src/router/authRouter.js';
 import cors from 'cors';
+import allowedOrigins from './src/config/cors.js';
 
 const PORT = process.env.PORT || 4000
 const app = express()
 
 app.use(cors({
-  origin: '*'
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)){
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed'));
+    }
+  }
 }));
 
 app.use(express.json());

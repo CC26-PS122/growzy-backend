@@ -19,6 +19,17 @@ export const registerUser = async (email, password, username, userData) => {
   }
 }
 
+export const rese = async (email) => {
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: email,
+    options: {
+      emailRedirectTo: 'https://growzy.vercel.app/dashboard'
+    }
+  })
+  if (error) throw error;
+};
+
 export const loginUser = async (email, password) => {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) throw error;

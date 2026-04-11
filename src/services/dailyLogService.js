@@ -62,24 +62,24 @@ export const updateDailyActivity = async (userId, dailyLog) => {
     moodData = data;
   }
 
-  if (dailyLog.amount) {
-    const { data: waterData, error: waterError } = await supabase
-      .from('water_transactions')
-      .insert({ daily_log_id: logData.id, amount: dailyLog.amount })
-      .select()
-      .single()
+  if (dailyLog.total_water_ml) {
+    // const { data: waterData, error: waterError } = await supabase
+    //   .from('water_transactions')
+    //   .insert({ daily_log_id: logData.id, amount: dailyLog.amount })
+    //   .select()
+    //   .single()
 
-    if (waterError) throw waterError;
+    // if (waterError) throw waterError;
 
     const { data: totalData, error: totalError } = await supabase
       .from('daily_logs')
-      .update({ total_water_ml: (logData.total_water_ml ?? 0) + dailyLog.amount })
+      .update({ total_water_ml: dailyLog.total_water_ml })
       .eq('id', logData.id)
       .select()
       .single();
 
     if (totalError) throw totalError;
-    waterResult = { waterData, totalData };
+    waterResult = totalData;
   }
 
   return { sleepData, moodData, waterResult };
@@ -106,9 +106,6 @@ export const getDailyLogsByUserId = async (userId) => {
           id,
           mood_name,
           default_expression_asset
-        ),
-        water_transactions (
-          amount
         )
       `)
       .eq('user_id', userId)

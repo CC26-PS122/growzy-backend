@@ -378,7 +378,7 @@ git push origin main
 
 ## Questions?
 
-- 📧 Email: cc26-ps122@team.com
+- 📧 Email: CC26-PS122@student.devacademy.id
 - 💬 GitHub Issues: [Report Issue](https://github.com/CC26-PS122/growzy-backend/issues)
 - 📚 Documentation: [README.md](README.md)
 

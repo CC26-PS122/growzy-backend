@@ -630,8 +630,8 @@ chore: Perubahan dependencies
 ## 📞 Support & Kontak
 
 - **GitHub Issues**: [Report Issue](https://github.com/CC26-PS122/growzy-backend/issues)
-- **Email**: [cc26-ps122@team.com](mailto:cc26-ps122@team.com)
-- **Project**: [Capstone Project - Bangkit 2024](https://www.bangkit.academy/)
+- **Email**: [CC26-PS122@student.devacademy.id](mailto:CC26-PS122@student.devacademy.id)
+- **Project**: [Capstone Project - Coding Camp 2026 powered by DBS Foundation](https://www.dbs.com/spark/index/id_id/site/codingcamp/index.html)
 
 ## 📄 Lisensi
 
@@ -639,6 +639,6 @@ Project ini menggunakan **ISC License** - lihat file [LICENSE](LICENSE) untuk de
 
 ---
 
-**Last Updated**: April 2024
+**Last Updated**: April 2026
 **Versi**: 1.0.0
 **Status**: ✅ Active Development

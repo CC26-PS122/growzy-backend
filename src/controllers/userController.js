@@ -59,7 +59,7 @@ export const login = async (req, res) => {
 
 export const resendEmail = async (req, res) => {
   try {
-    const email = req.body;
+    const { email } = req.body;
 
     await resendConfirmEmail(email);
     res.status(200).json({

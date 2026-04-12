@@ -2,19 +2,16 @@ import express from 'express';
 import router from './src/router/router.js';
 import authRouter from './src/router/authRouter.js';
 import cors from 'cors';
-import allowedOrigins from './src/config/cors.js';
 
 const PORT = process.env.PORT || 4000
 const app = express()
 
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)){
-      callback(null, true);
-    } else {
-      callback(new Error('CORS not allowed'));
-    }
-  },
+  origin: [
+    'https://growzy.vercel.app/',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+  ],
   methods: '*',
   allowedHeaders: '*',
   optionsSuccessStatus: 200

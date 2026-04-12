@@ -14,7 +14,10 @@ app.use(cors({
     } else {
       callback(new Error('CORS not allowed'));
     }
-  }
+  },
+  methods: '*',
+  allowedHeaders: '*',
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());

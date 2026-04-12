@@ -1,5 +1,5 @@
 import { supabaseAuthMiddleware } from '../middleware/supabaseAuthMiddleware.js';
-import { loginUser, logoutUser, registerUser, resendConfirmEmail, updateUserByAuthId } from '../services/userService.js';
+import { loginUser, logoutUser, registerUser, updateUserByAuthId, resendConfirmEmail } from '../services/userService.js';
 
 export const authMiddleware = async (req, res, next) => {
   supabaseAuthMiddleware(req, res, next);
